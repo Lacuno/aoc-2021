@@ -32,7 +32,7 @@ function iterateAndFilterInput(predicate) {
 
         let bits = iterInput.map(x => x[bitIdx]);
         // Finds most/least common value in array according to predicate
-        const filterBit = predicate.apply(null, [bits.filter(bit => bit === '0'), bits.filter(bit => bit === '1')]) ? '0' : '1';
+        const filterBit = predicate(bits.filter(bit => bit === '0'), bits.filter(bit => bit === '1')) ? '0' : '1';
         iterInput = iterInput.filter(x => x[bitIdx] === filterBit);
     }
     return iterInput[0];
