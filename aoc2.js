@@ -8,39 +8,46 @@ const input = fileContent
             value: +x[1]
         }
     });
-
 let x = 0;
 let depth = 0;
-for (let inp of input) {
-    switch (inp.command) {
-        case 'forward':
-            x += inp.value;
-            break;
-        case 'down':
-            depth += inp.value;
-            break;
-        case 'up':
-            depth -= inp.value;
-            break;
-    }
-}
-console.log(x * depth);
-
-x = 0;
-depth = 0;
 let aim = 0;
-for (let inp of input) {
-    switch (inp.command) {
-        case 'forward':
+
+part1();
+part2();
+
+function part1() {
+    manover(inp => x += inp.value,
+        inp => depth += inp.value,
+        inp => depth -= inp.value
+    );
+}
+
+function part2() {
+    manover(inp => {
             x += inp.value;
             depth += aim * inp.value;
-            break;
-        case 'down':
-            aim += inp.value;
-            break;
-        case 'up':
-            aim -= inp.value;
-            break;
-    }
+        },
+        inp => aim += inp.value,
+        inp => aim -= inp.value
+    );
 }
-console.log(x * depth);
+
+function manover(forwardFn, downFn, upFn) {
+    x = 0;
+    depth = 0;
+    aim = 0;
+    for (let inp of input) {
+        switch (inp.command) {
+            case 'forward':
+                forwardFn(inp);
+                break;
+            case 'down':
+                downFn(inp);
+                break;
+            case 'up':
+                upFn(inp);
+                break;
+        }
+    }
+    console.log(x * depth);
+}
