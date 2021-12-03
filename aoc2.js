@@ -13,14 +13,14 @@ part1();
 part2();
 
 function part1() {
-    manover(inp => x += inp.value,
+    maneuver(inp => x += inp.value,
         inp => depth += inp.value,
         inp => depth -= inp.value
     );
 }
 
 function part2() {
-    manover(inp => {
+    maneuver(inp => {
             x += inp.value;
             depth += aim * inp.value;
         },
@@ -29,7 +29,7 @@ function part2() {
     );
 }
 
-function manover(forwardFn, downFn, upFn) {
+function maneuver(forwardFn, downFn, upFn) {
     x = 0;
     depth = 0;
     aim = 0;
