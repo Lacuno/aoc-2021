@@ -8,10 +8,7 @@ const input = fileContent
             value: +x[1]
         }
     });
-let x = 0;
-let depth = 0;
-let aim = 0;
-
+let x, depth, aim = 0;
 part1();
 part2();
 
