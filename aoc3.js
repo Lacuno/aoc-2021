@@ -1,42 +1,39 @@
 const fileContent = await Deno.readTextFile('./inputs/day3.txt')
 const input = fileContent
     .split('\n');
-
 const length = input[0].length;
 
-// Part 1:
-let resultingBits = "";
-for(let bitIdx = 0; bitIdx < length; bitIdx++) {
-    let bits = input.map(x => x[bitIdx]);
-    resultingBits += bits.filter(bit => bit === '0').length > bits.filter(bit => bit === '1').length ? 0 : 1;
-}
-const gammaRate = parseInt(resultingBits, 2);
-const epsilonRate = parseInt(resultingBits.split('').map(x => x === '0' ? '1' : '0').join(''), 2);
-console.log(gammaRate * epsilonRate);
+part1();
+part2();
 
-// Part 2:
-let iterInput = input;
-for(let bitIdx = 0; bitIdx < length; bitIdx++) {
-    if(iterInput.length === 1) {
-        break;
+function part1() {
+    let resultingBits = "";
+    for (let bitIdx = 0; bitIdx < length; bitIdx++) {
+        let bits = input.map(x => x[bitIdx]);
+        resultingBits += bits.filter(bit => bit === '0').length > bits.filter(bit => bit === '1').length ? 0 : 1;
     }
-
-    let bits = iterInput.map(x => x[bitIdx]);
-    const filterBit = bits.filter(bit => bit === '0').length > bits.filter(bit => bit === '1').length ? '0' : '1';
-    iterInput = iterInput.filter(x => x[bitIdx] === filterBit);
+    const gammaRate = parseInt(resultingBits, 2);
+    const epsilonRate = parseInt(resultingBits.split('').map(x => x === '0' ? '1' : '0').join(''), 2);
+    console.log(gammaRate * epsilonRate);
 }
-const oxygenGeneratorRating = parseInt(iterInput[0], 2);
 
-iterInput = input;
-for(let bitIdx = 0; bitIdx < length; bitIdx++) {
-    if(iterInput.length === 1) {
-        break;
+function part2() {
+    const oxygenGeneratorRating = parseInt(iterateAndFilterInput((arr1, arr2) => arr1.length > arr2.length), 2);
+    const co2ScrubberRating = parseInt(iterateAndFilterInput((arr1, arr2) => arr1.length <= arr2.length), 2);
+    console.log(oxygenGeneratorRating * co2ScrubberRating);
+}
+
+function iterateAndFilterInput(predicate) {
+    let iterInput = input;
+    for (let bitIdx = 0; bitIdx < length; bitIdx++) {
+        if (iterInput.length === 1) {
+            break;
+        }
+
+        let bits = iterInput.map(x => x[bitIdx]);
+        // Finds most/least common value in array according to predicate
+        const filterBit = predicate.apply(null, [bits.filter(bit => bit === '0'), bits.filter(bit => bit === '1')]) ? '0' : '1';
+        iterInput = iterInput.filter(x => x[bitIdx] === filterBit);
     }
-
-    let bits = iterInput.map(x => x[bitIdx]);
-    const filterBit = bits.filter(bit => bit === '0').length <= bits.filter(bit => bit === '1').length ? '0' : '1';
-    iterInput = iterInput.filter(x => x[bitIdx] === filterBit);
+    return iterInput[0];
 }
-const co2ScrubberRating = parseInt(iterInput[0], 2);
-console.log(oxygenGeneratorRating * co2ScrubberRating);
-
