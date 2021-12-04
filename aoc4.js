@@ -50,7 +50,7 @@ function bingoGame(onBingoFn) {
                 continue;
             }
             board[y][x].marked = true;
-            if(validateBoard(board, x, y) === 'bingo' && onBingoFn(board, draw)) {
+            if(isBingo(board, x, y) && onBingoFn(board, draw)) {
                 return;
             }
         }
@@ -77,10 +77,10 @@ function findOnBoard(board, num) {
     return [-1, -1];
 }
 
-function validateBoard(board, x, y) {
+function isBingo(board, x, y) {
     // Look if every elem in the row or column is marked
     if(board[y].every(elem => elem.marked) || board.map(row => row[x]).every(elem => elem.marked)) {
-        return 'bingo';
+        return true;
     }
 
     if(x == y) { // if we are on the main diagonals
@@ -97,8 +97,8 @@ function validateBoard(board, x, y) {
             }
         }
         if(bingo) {
-            return 'bingo';
+            return true;
         }
     }
-    return 'no bingo';
+    return false;
 }
