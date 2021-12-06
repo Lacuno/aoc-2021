@@ -11,7 +11,7 @@ function part1() {
 }
 
 function part2() {
-    simulate(255);
+    simulate(256);
 }
 
 function simulate(nrRounds) {
