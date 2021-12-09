@@ -1,3 +1,5 @@
+import {saveAccess} from "./array.util.js";
+
 const fileContent = await Deno.readTextFile('./inputs/day9.txt')
 const input = fileContent
     .split('\r\n')
@@ -28,10 +30,10 @@ function getLowPoints() {
     let lowPoints = [];
     for (let y = 0; y < input.length; y++) {
         for (let x = 0; x < input[y].length; x++) {
-            if ((y + 1 >= input.length || input[y][x] < input[y + 1][x]) &&
-                (y - 1 < 0 || input[y][x] < input[y - 1][x]) &&
-                (x + 1 >= input[y].length || input[y][x] < input[y][x + 1]) &&
-                (x - 1 < 0 || input[y][x] < input[y][x - 1])) {
+            if (input[y][x] < saveAccess(input, x, y + 1, 10) &&
+                input[y][x] < saveAccess(input, x, y - 1, 10) &&
+                input[y][x] < saveAccess(input, x + 1, y, 10) &&
+                input[y][x] < saveAccess(input, x - 1, y, 10)) {
                 lowPoints.push({x, y});
             }
         }
@@ -40,7 +42,7 @@ function getLowPoints() {
 }
 
 function recursiveSearch(lastVal, x, y) {
-    if (y >= input.length || y < 0 || x >= input[y].length || x < 0) {
+    if (saveAccess(input, x, y) === null) {
         return 0;
     }
     if (input[y][x] === 9 || input[y][x] === -1) {
