@@ -21,20 +21,20 @@ part2();
 function part1() {
     console.log(input
         .flatMap(x => x.outputValues)
-        .filter(x => x.length === 2 || x.length === 4 || x.length === 3 || x.length === 7)
+        .filter(x => x.length === 2 || x.length === 3 || x.length === 4 || x.length === 7)
         .length);
 }
 
 function part2() {
     const allInterpretations = [...itertools.permutations('abcdefg')];
     let sum = 0;
-    for (let inp of input) {
+    for (let line of input) {
         const validInterpretation = allInterpretations.filter(interpretation => {
-            return inp.inputValues
+            return line.inputValues
                 .every(pattern => solve7Segment(pattern, interpretation) !== -1);
         })[0];
 
-        const output = inp.outputValues.map(val => solve7Segment(val, validInterpretation))
+        const output = line.outputValues.map(val => solve7Segment(val, validInterpretation))
             .reduce((a, b) => a * 10 + b);
         sum += output;
     }
