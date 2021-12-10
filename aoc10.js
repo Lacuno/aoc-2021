@@ -3,6 +3,12 @@ const input = fileContent
     .split('\r\n')
     .filter(x => x !== '');
 
+const matches = {
+    '(': ')',
+    '[': ']',
+    '{': '}',
+    '<': '>',
+};
 part1();
 part2();
 
@@ -49,15 +55,11 @@ function analyse() {
         const stack = [];
 
         for (let x of line) {
-            if (x === '(' || x === '<' || x === '[' || x === '{') {
+            if (x in matches) {
                 stack.push(x);
             } else {
                 let y = stack.pop();
-                if (y === '(' && x === ')') continue;
-                if (y === '<' && x === '>') continue;
-                if (y === '[' && x === ']') continue;
-                if (y === '{' && x === '}') continue;
-
+                if (x === matches[y]) continue;
                 return {
                     syntaxError: true,
                     elem: x
