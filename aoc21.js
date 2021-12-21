@@ -58,43 +58,28 @@ function splitUniverse(p1, p2, p1Turn) {
         return 0;
     }
 
-    if (p1Turn) {
-        let sum = 0;
-        for (let diceOutcome = 3; diceOutcome <= 9; diceOutcome++) {
-            const oldPos = p1.pos;
-            const oldScore = p1.score;
-            moveForward(p1, diceOutcome);
-
-            const multiplier = diceDistribution(diceOutcome);
-            sum += multiplier * splitUniverse(p1, p2, false);
-            p1.pos = oldPos;
-            p1.score = oldScore;
-        }
-        return sum;
-    } else {
-        let sum = 0;
-        for (let diceOutcome = 3; diceOutcome <= 9; diceOutcome++) {
-            const oldPos = p2.pos;
-            const oldScore = p2.score;
-            moveForward(p2, diceOutcome);
-
-            const multiplier = diceDistribution(diceOutcome);
-            sum += multiplier * splitUniverse(p1, p2, true);
-            p2.pos = oldPos;
-            p2.score = oldScore;
-        }
-        return sum;
+    const currPlayer = p1Turn ? p1 : p2;
+    let sum = 0;
+    for (let diceOutcome = 3; diceOutcome <= 9; diceOutcome++) {
+        const oldPos = currPlayer.pos;
+        const oldScore = currPlayer.score;
+        moveForward(currPlayer, diceOutcome);
+        const multiplier = diceDistribution(diceOutcome);
+        sum += multiplier * splitUniverse(p1, p2, !p1Turn);
+        currPlayer.pos = oldPos;
+        currPlayer.score = oldScore;
     }
+    return sum;
+}
 
-    function diceDistribution(num) {
-        switch (num) {
-            case 3: return 1;   // 111
-            case 4: return 3;   // 112, 121, 211
-            case 5: return 6;   // 113, 131, 311, 122, 212, 221
-            case 6: return 7;   // 123, 132, 213, 231, 312, 321, 222
-            case 7: return 6;   // 223, 232, 322, 133, 313, 331
-            case 8: return 3;   // 233, 323, 332
-            case 9: return 1;   // 333
-        }
+function diceDistribution(num) {
+    switch (num) {
+        case 3: return 1;   // 111
+        case 4: return 3;   // 112, 121, 211
+        case 5: return 6;   // 113, 131, 311, 122, 212, 221
+        case 6: return 7;   // 123, 132, 213, 231, 312, 321, 222
+        case 7: return 6;   // 223, 232, 322, 133, 313, 331
+        case 8: return 3;   // 233, 323, 332
+        case 9: return 1;   // 333
     }
 }
